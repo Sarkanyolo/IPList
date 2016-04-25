@@ -10,10 +10,10 @@
 
         public IPv4List() {
             iplist = new List<IP>();
-            foreach (var Interface in NetworkInterface.GetAllNetworkInterfaces()) {
-                foreach (var UnicatIPInfo in Interface.GetIPProperties().UnicastAddresses) {
-                    if (UnicatIPInfo.Address.AddressFamily == AddressFamily.InterNetwork && !UnicatIPInfo.Address.ToString().StartsWith("127.")) {
-                        iplist.Add(new IP(UnicatIPInfo.Address, UnicatIPInfo.IPv4Mask));
+            foreach (var IFace in NetworkInterface.GetAllNetworkInterfaces()) {
+                foreach (var IPInfo in IFace.GetIPProperties().UnicastAddresses) {
+                    if (IPInfo.Address.AddressFamily == AddressFamily.InterNetwork && !IPInfo.Address.ToString().StartsWith("127.")) {
+                        iplist.Add(new IP(IPInfo.Address, IPInfo.IPv4Mask));
                     }
                 }
             }
@@ -38,22 +38,23 @@
 
             public IPAddress Ip { get { return _ip; } }
             public IPAddress Mask { get { return _mask; } }
-			
-		// Broadcast is calculated at first use
-            public IPAddress Broadcast {
-                get {
+
+            // Broadcast is calculated at first use
+            public IPAddress Broadcast{
+                get{
                     if (_broadcast == null) {
-                        byte[] complementedMaskBytes = new byte[4];
-                        byte[] broadcastIPBytes = new byte[4];
+                        byte[] BMask = new byte[4];
+                        byte[] BIP = new byte[4];
                         for (int i = 0; i < 4; i++) {
-                            complementedMaskBytes[i] = (byte)~(_mask.GetAddressBytes()[i]);
-                            broadcastIPBytes[i] = (byte)((_ip.GetAddressBytes()[i]) | complementedMaskBytes[i]);
+                            BMask[i] = (byte)~(_mask.GetAddressBytes()[i]);
+                            BIP[i] = (byte)((_ip.GetAddressBytes()[i]) | BMask[i]);
                         }
-                        _broadcast = new IPAddress(broadcastIPBytes);
+                        _broadcast = new IPAddress(BIP);
                     }
                     return _broadcast;
                 }
-            }
-        }
+            } // Broadcast
+        } // IP
+
     }
 }
