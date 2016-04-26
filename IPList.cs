@@ -13,7 +13,7 @@
             foreach (var IFace in NetworkInterface.GetAllNetworkInterfaces()) {
                 foreach (var IPInfo in IFace.GetIPProperties().UnicastAddresses) {
                     if (IPInfo.Address.AddressFamily == AddressFamily.InterNetwork && !IPInfo.Address.ToString().StartsWith("127.")) {
-                        iplist.Add(new IP(IPInfo.Address, IPInfo.IPv4Mask));
+                        iplist.Add(new IP(IPInfo.Address, IPInfo.IPv4Mask, IFace.GetPhysicalAddress().ToString()));
                     }
                 }
             }
@@ -31,13 +31,16 @@
 
         public sealed class IP {
             private IPAddress _ip, _mask, _broadcast;
-            public IP(IPAddress Ip, IPAddress Mask) {
+            private string _mac;
+            public IP(IPAddress Ip, IPAddress Mask, string Mac) {
                 _ip = Ip;
                 _mask = Mask;
+                _mac = Mac;
             }
 
             public IPAddress Ip { get { return _ip; } }
             public IPAddress Mask { get { return _mask; } }
+            public string Mac { get { return _mac; } }
 
             // Broadcast is calculated at first use
             public IPAddress Broadcast{
