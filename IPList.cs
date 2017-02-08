@@ -1,4 +1,4 @@
-﻿namespace IPList {
+namespace IPList {
     using System.Collections;
     using System.Collections.Generic;
     using System.Net;
@@ -39,9 +39,9 @@
                 _mac = Mac;
             }
 
-            public IPAddress Ip { get { return _ip; } }
-            public IPAddress Mask { get { return _mask; } }
-            public PhysicalAddress Mac { get { return _mac; } }
+            public IPAddress Ip { get { return _ip; } private set { } }
+            public IPAddress Mask { get { return _mask; } private set { } }
+            public PhysicalAddress Mac { get { return _mac; } private set { } }
 
             // Broadcast is calculated at first use
             public IPAddress Broadcast {
@@ -57,8 +57,8 @@
                     }
                     return _broadcast;
                 }
-            } // Broadcast
+            }
         }
         #endregion
-    } // IPv4List
+    }
 }
